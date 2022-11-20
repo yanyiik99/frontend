@@ -6,7 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../Button/index';
 import * as Component from '../index';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadUsersStart } from '../../bootstraps/actions';
+import { deleteUserStart, loadUsersStart } from '../../bootstraps/actions';
+import { toast } from 'react-toastify';
 
 function UserList() {
   const {users} = useSelector((state) => state.data);
@@ -16,21 +17,14 @@ function UserList() {
 
   // Dispatch go to redux state 
   useEffect(()=>{
-    dispatch(loadUsersStart())
+      dispatch(loadUsersStart());
   }, [])
-  console.log(users)
 
-
-  // DELETE DATA
-  const deleteData = (id) => {
-
-    axios.delete('http://localhost:8200/users/' + id)
-      .then((ress) => {
-        console.log(ress);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+  const handleDelete = (id) => {
+    dispatch(deleteUserStart(id))
+    setTimeout(()=>{
+      toast.warn("BERHASIH HAPUS")
+    }, 500)
   }
 
 
@@ -40,14 +34,6 @@ function UserList() {
   return (
     <div>
       <h1 className='text-4xl mb-10'>User List</h1>
-      {/* <div onClick={
-        ()=>{
-          navigate('/testing')
-        }
-      }>
-        <Button btn="tambah" className='mb-10'/>
-      </div> */}
-
       <Component.InputUsers />
       <table className='border-2 h-auto max-w-xl sm:max-w-2xl'>
         <thead>
@@ -74,9 +60,11 @@ function UserList() {
                     btn="delete"
                     onClick={()=>{
                       // navigate(`/testing/${el.id}`);
-                      deleteData(el.id)
+                      // deleteData(el.id)
+                      handleDelete(el.id);
                     }}
                   />
+                  {/* <Component.DeleteModal /> */}
                 </td>
               </tr>
               )

@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import rootReducer from './bootstraps/rootReducer';
 import createSagaMiddleWare from 'redux-saga';
 import rootSaga from './bootstraps/sagas';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -24,14 +25,15 @@ function App() {
       elm: <Page.Testing />
     },
     {
-      path: '/testing/:id',
-      elm: <Page.Testing />
+      path: '/Edit',
+      elm: <Page.Edit />
     }
   ]
 
 
   return (
     <Provider store={store}>
+    <ToastContainer />
       <Router>
         <Routes>
           {

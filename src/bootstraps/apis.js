@@ -11,3 +11,9 @@ export const getUsersApi = () => {
 export const postUserApi = (user) => {
   return BaseApi.post('/users', user)
 }
+
+
+export const deleteUserApi = (userId) => {
+  return BaseApi.delete(`/users/${userId}`)
+}
+

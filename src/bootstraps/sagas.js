@@ -18,26 +18,42 @@ function* onLoadUsersStartAsync(){
     console.log(response.data);
   } catch (error){
     // Jika Terjadi Error taruh data di ACTION error
-    yield put(ACTION.loadUsersError(error.message));
-    console.log(error.message)
+    yield put(ACTION.loadUsersError(error.response.data));
   }
 }
 
 // POST DATA TURAH YUNI
-function* onPostUserStartAsync({user}) {
+function* onPostUserStartAsync({payload}) {
   try {
     // Consume API
-    const response = yield call(API.postUserApi, user);
+    const response = yield call(API.postUserApi, payload);
     // MENGIRIMKAN DATA KE API TIDAK KE REDUX
-    yield put(ACTION.postUserSuccess(response?.data));
+    yield put(ACTION.postUserSuccess(response.data));
     // CONSOLE LOG
     console.log(response);
   } catch (error) {
     // Jika Terjadi Error taruh data di ACTION error
-    yield put(ACTION.postUserError(error?.message));
-    console.log(error)
+    yield put(ACTION.postUserError(error.response.data));
   }
 }
+
+
+// DELETE DATA TURAH YUNI
+function* onDeleteUserStartAsync(userId) {
+  try {
+    // Consume API
+    const response = yield call(API.deleteUserApi, userId);
+    // MENGIRIMKAN DATA KE API TIDAK KE REDUX
+    yield put(ACTION.deleteUserSuccess(userId));
+
+  } catch (error) {
+    // Jika Terjadi Error taruh data di ACTION error
+    yield put(ACTION.deleteUserError(error.response.data));
+  }
+}
+
+
+
 
 
 // FUNCTION ONLOADING WITH TAKEEVERY & TAKELATES >>>>>>>>
@@ -49,8 +65,17 @@ function* onPostUser() {
   yield takeLatest(CONST.POST_USER_START, onPostUserStartAsync);
 }
 
+// FUNCTION ONLOADING WITH JUST TAKE >>>>>>>>
+function* onDeleteUser() {
+  while (true) {
+    const { payload: userId } = yield take(CONST.DELETE_USER_START);
+    yield call(onDeleteUserStartAsync, userId);
+  }
+}
+
+
 // FORK ONLOADING
-const userSagas = [fork(onLoadUsers), fork(onPostUser)]
+const userSagas = [fork(onLoadUsers), fork(onPostUser), fork(onDeleteUser)]
 
 // EXPORT ALL
 export default function* rootSaga() {

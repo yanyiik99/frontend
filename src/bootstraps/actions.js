@@ -27,3 +27,18 @@ export const postUserError = (error) => ({
   type: CONST.POST_USER_ERROR,
   payload: error,
 })
+
+
+// DELETE DATA USER : note tidak perlu mengirimkan data ke redux hanya post ke API saja
+export const deleteUserStart = (userId) => ({
+  type: CONST.DELETE_USER_START,
+  payload: userId
+})
+export const deleteUserSuccess = (userId) => ({
+  type: CONST.DELETE_USER_SUCCESS,
+  payload: userId
+})
+export const deleteUserError = (error) => ({
+  type: CONST.DELETE_USER_ERROR,
+  payload: error,
+})

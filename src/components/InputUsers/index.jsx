@@ -1,55 +1,72 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react'
 import * as Component from '../index'
-// import Select from "react-select";
+import Select from "react-select";
 import MyBtn from '../Button/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { postUserStart } from '../../bootstraps/actions';
+import { loadUsersStart, postUserStart } from '../../bootstraps/actions';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-// const initialState = {
-//   name: "",
-//   kehadiran: "",
-//   ucapan: ""
-// }
+const initialState = {
+  name: "",
+  kehadiran: "",
+  ucapan: ""
+}
 
 function InputUsers() {
   // Mengambil initial State
-  const [dataInput, setDataInput] = useState({});
-  // const {name, kehadiran, ucapan} = dataInput;
+  const [dataInput, setDataInput] = useState(initialState);
+  const {name, kehadiran, ucapan} = dataInput;
   const dispatch = useDispatch();
 
 
   const handleSubmit = (e) => {
-    e.prevetDefault();
-    // if(name && kehadiran && ucapan ){
+    e.preventDefault();
+    if(name && kehadiran && ucapan ){
+      // POST DATA REDUX
       dispatch(postUserStart(dataInput))
-    // }
+
+      // UNTUK MENGHAPUS VALUE CACHE YANG ADA DI DALAM INPUT
+      setDataInput({
+        name: "",
+        kehadiran: "",
+        ucapan: ""
+      })
+
+      // GET DATA AGAIN IN REDUX 
+      setTimeout(()=>{
+        toast.success("HURRAY BERHASIL")
+        dispatch(loadUsersStart());
+      }, 500)
+    }
   }
 
-  console.log(dataInput)
-  // const inputSelect = [
-  //   {
-  //     label: "Hadir",
-  //     value: "Hadir"
-  //   },
-  //   {
-  //     label: "Berhalangan",
-  //     value: "Berhalangan"
-  //   }
-  // ]
 
-  // const themeCustom = (theme) => {
-  //   return{
-  //     ...theme,
-  //     borderRadius: 2,
-  //     colors: {
-  //       ...theme.colors,
-  //       primary25: '#F0CAA3',
-  //       primary: '#F49D1A',
-  //       primary50: '#F49D1A'
-  //     }
-  //   }
-  // }
+  // console.log(dataInput)
+  const inputSelect = [
+    {
+      label: "Hadir",
+      value: "Hadir"
+    },
+    {
+      label: "Berhalangan",
+      value: "Berhalangan"
+    }
+  ]
+
+  const themeCustom = (theme) => {
+    return{
+      ...theme,
+      borderRadius: 2,
+      colors: {
+        ...theme.colors,
+        primary25: '#F0CAA3',
+        primary: '#F49D1A',
+        primary50: '#F49D1A'
+      }
+    }
+  }
 
 
 
@@ -66,14 +83,14 @@ function InputUsers() {
             label="Nama"
             type="text"  
             placeholder="masukan nama"
-            value={dataInput.name}
+            value={name}
             className={classNames('border-2 px-4 py-1 min-w-full')}
             onChange={(val)=>
               setDataInput((prev)=> ({...prev, name: val}) )
             }
           />
           <label>Kehadiran</label>
-          {/* <Select
+          <Select
             theme={themeCustom}
             options={inputSelect}
             placeholder="Pilih Kehadiran"
@@ -81,29 +98,19 @@ function InputUsers() {
             onChange={(val)=>
               setDataInput((prev) => ({...prev, kehadiran: val.value}))
             }
-          /> */}
-          <Component.Input 
-            label="kehadiran"
-            type="text"  
-            placeholder="masukan kehadiran"
-            value={dataInput.kehadiran}
-            className={classNames('border-2 px-4 py-1 min-w-full')}
-            onChange={(val)=>
-              setDataInput((prev)=> ({...prev, kehadiran: val}) )
-            }
           />
           <Component.Input 
             label="Ucapan"
             type="text"  
             placeholder="masukan ucapan"
-            value={dataInput.ucapan}
+            value={ucapan}
             className={classNames('border-2 px-4 py-1 min-w-full')}
             onChange={(val)=>
               setDataInput((prev)=> ({...prev, ucapan: val}) )
             }
           />
         </div>
-        <MyBtn btn="tambah" type='text'/>
+        <MyBtn btn="tambah" type='submit'/>
       </form>
     </div>
   )
