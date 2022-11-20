@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .bg-color-primary {
+    @apply
+    bg-[#13568B]
+  }
+
+  .bg-color-support {
+    @apply
+      bg-[#94C5EB]
+  }
+
+  .bg-color-secondary {
+    @apply
+      bg-[#989DA1]
+  }
+}
